@@ -5,7 +5,8 @@ import doctorController from "../controllers/doctorController";
 import patientController from "../controllers/patientController"
 import specialtyController from '../controllers/specialtyController'
 import clinicController from "../controllers/clinicController";
-import handbookController from "../controllers/handbookController"
+import handbookController from "../controllers/handbookController";
+import schedulesRemoteController from "../controllers/schedulesRemoteController";
 let router = express.Router();
 
 let initWebRoutes = (app) => {
@@ -24,6 +25,10 @@ let initWebRoutes = (app) => {
   router.put("/api/edit-user", userController.handleEditUsers);
   router.delete("/api/delete-user", userController.handleDeleteUsers);
   router.get("/api/allcode", userController.getAllCode);
+  router.post("/api/change-password", userController.changePassword);
+  router.post("/api/forgot-password", userController.forgotPassword);
+  router.post("/api/confirm-password", userController.confirmPassword);
+  router.post("/api/create-new-user-login", userController.handleCreateNewUsersLogin);
 
   router.get("/api/top-doctor-home", doctorController.getTopDoctorHome);
   router.get("/api/get-all-doctors", doctorController.getAllDoctor);
@@ -35,9 +40,13 @@ let initWebRoutes = (app) => {
   router.get('/api/get-profile-infor-doctor-by-id', doctorController.getProfileDoctorById);
   router.get('/api/get-list-patient-for-doctor',doctorController.getListPatientForDoctor);
   router.post('/api/send-remedy', doctorController.sendRemedy);
+  router.post('/api/total-stars', doctorController.totalStars);
+  router.get('/api/get-stars', doctorController.getStars);
 
   router.post('/api/patient-book-appointment', patientController.postBookAppointment);
   router.post('/api/verify-book-appointment', patientController.postVerifyBookAppointment);
+  router.get('/api/get-list-patient-booking',patientController.getListPatient);
+  router.delete('/api/delete-list-patient-booking',patientController.deleteListPatient);
 
   router.post('/api/create-new-specialty', specialtyController.createSpecialty);
   router.get('/api/get-specialty', specialtyController.getAllSpecialty);
@@ -52,6 +61,15 @@ let initWebRoutes = (app) => {
   router.get('/api/get-detail-handbook-by-id', handbookController.getDetailHandbookById);
   router.delete('/api/delete-handbook', handbookController.deleteHandbook);
   router.put('/api/edit-handbook', handbookController.editHandbook);
+
+  router.get("/api/get-all-doctor-remotes", schedulesRemoteController.getAllDoctorRemote);
+  router.post('/api/create-new-schedules-remote', schedulesRemoteController.bulkCreateScheduleRemote);
+  router.get('/api/get-schedule-remote-doctor-by-date', schedulesRemoteController.getScheduleRemoteByDate);
+  router.get('/api/get-detail-specialty-remote-by-id', schedulesRemoteController.getDetailSpecialtyRemoteById);
+  router.post('/api/patient-book-appointment-remote', schedulesRemoteController.postBookAppointmentRemote);
+  router.get('/api/get-list-patient-remote-for-doctor',schedulesRemoteController.getListPatientRemoteForDoctor);
+  router.post('/api/create-payment-booking-remote', schedulesRemoteController.createPaymentBookingRemote);
+  // router.post('/api/pay-success', schedulesRemoteController.handlePaymentSuccess );
 
   return app.use("/", router);
 };
