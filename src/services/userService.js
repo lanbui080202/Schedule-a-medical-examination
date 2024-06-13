@@ -162,13 +162,12 @@ let createNewUser = (data) => {
 let handleCreateNewUsersLogin = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if ( !data.password || !data.firstName || !data.lastName) {
+      if (!data.password || !data.firstName || !data.lastName) {
         resolve({
           errCode: 1,
           errMessage: "Missing required parameters",
         });
       } else {
-        console.log("check data");
         let check = await checkUserEmail(data.email);
         if (check === true) {
           resolve({
@@ -427,7 +426,28 @@ let confirmPassword = (data) => {
     }
   });
 };
-
+let handleGetUserInfo = (doctorId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!doctorId) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameters !",
+        });
+      } else {
+        let data = await db.Doctor_Infor.findOne({
+          where: { doctorId: doctorId },
+        });
+        resolve({
+          errCode: 0,
+          data: data,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
   handleUserLogin: handleUserLogin,
   getAllUsers: getAllUsers,
@@ -440,4 +460,5 @@ module.exports = {
   forgotPassword: forgotPassword,
   confirmPassword: confirmPassword,
   handleCreateNewUsersLogin: handleCreateNewUsersLogin,
+  handleGetUserInfo: handleGetUserInfo,
 };
